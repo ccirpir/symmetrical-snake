@@ -1,7 +1,7 @@
 # Skull.png
 ## Description
 Good Luck.  This was under the Misc category.
-![[Skull.png]]
+![Skull.png](Skull.png)
 ## tl;dr
 We are given a png file that turns out to be a corrupted Qr Code. We have to identify the type of Qr Code and the associated pattern for reading bits. Then it is simply a matter of decoding  the bytes and converting to Ascii characters.
 
@@ -32,7 +32,7 @@ After perusing the Wikipedia page, I thought Ancillary chunks might have been th
 [See Wikipedia for further information about chunks](https://en.wikipedia.org/wiki/Portable_Network_Graphics#%22Chunks%22_within_the_file)
 
 The tool `pngcheck` verified that the file was a valid and detected the required Critical Chunks but no ancillary chunks.
- ![[Pasted image 20210625145216.png]]
+ ![Pasted image 20210625145216.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210625145216.png)
 
    ## QR Code
   At this point, I exhausted the idea that the flag was hidden with stenography or within the data format of a `png`.
@@ -44,19 +44,19 @@ The tool `pngcheck` verified that the file was a valid and detected the required
 		  2.  The following 8 bits are used to store the length of the data
 
   2.  The next step was to understand to where and how  the format information is stored. [^1]
-  ![[qrcode.png]] 
+  ![qrcode.png](qrcode.png)
 	  1.  The top left alignment square stores the Most Significant Bit (MSB) in the red box labeled `14`. The other two alignment squares are copies in case of damage to the QR Code. The given png only contains the Mask portion in the top right corner and the first 8 bits labeled `0-7` 
 	  2.  With this given information, I referenced Wikipedia to determine the mask version which will be used prior to decoding the text blocks. Additionally since there are a limited amount of combinations, You can manually match the pattern for bits `0-7`. These bits will give you the level of Error Correction and the bits `12-10` will give you the mask. Skull.png is  Error Correction Level Low and Mask 2 `column % 3 ==0` 
 	  3.  With this knowledge, It is obvious that the QR code is missing the Reed-Solomon Error correction code blocks.
   3.  At this point, I started to manually recreate the QR code using online tools. [^2][^3]
-![[Pasted image 20210630201225.png]]
+![Pasted image 20210630201225.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210630201225.png)
 The following images were used to learn the pattern for decoding the data blocks to get the flag.
 
-![[Pasted image 20210708172829.png]]
+![Pasted image 20210708172829.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210708172829.png)
 4. I hit a wall as I would initially get the following string  during my initial attempts at decoding `Grea~` . I was confused as the QR Code was correctly copied over and several online resources verified that it was the correct mask , QR code version and Error correction level. It took many days until I realized that the mask is effectively an XOR operation to break up chunks of the same color.  I wasn't applying the mask to the QR code so the moment I started in the third column, the values were in the extended ASCII range.
 	1.  When applying the mask to the QR Code, for each unit in that row or column invert the value. Black --> White and White --> Black. 
 
-![[Pasted image 20210709191225.png]]
+![Pasted image 20210709191225.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210709191225.png)
 
   The flag
   ```

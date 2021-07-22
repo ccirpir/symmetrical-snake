@@ -53,7 +53,7 @@ The tool `pngcheck` verified that the file was a valid and detected the required
 The following images were used to learn the pattern for decoding the data blocks to get the flag.
 
 ![Pasted image 20210708172829.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210708172829.png)
-4. I hit a wall as I would initially get the following string  during my initial attempts at decoding `Grea~` . I was confused as the QR Code was correctly copied over and several online resources verified that it was the correct mask , QR code version and Error correction level. It took many days until I realized that the mask is effectively an XOR operation to break up chunks of the same color.  I wasn't applying the mask to the QR code so the moment I started in the third column, the values were in the extended ASCII range.
+4.  I hit a wall as I would initially get the following string  during my initial attempts at decoding `Grea~` . I was confused as the QR Code was correctly copied over and several online resources verified that it was the correct mask , QR code version and Error correction level.  But yet if I continued decoded the message, it was values in the extended ASCII range. I eventually realized that a mask is applied during the creation of QR Code after the data is encoded. The mask is effectively an XOR operation to break up chunks of the same color. In order to decode the real value of the extended ASCII values, I applied the mask  again effectively undoing the operation.
 	1.  When applying the mask to the QR Code, for each unit in that row or column invert the value. Black --> White and White --> Black. 
 
 ![Pasted image 20210709191225.png](https://github.com/ccirpir/symmetrical-snake/blob/094bccc52f038c7014a4d40b175c96118252fc71/Pasted%20image%2020210709191225.png)
@@ -76,5 +76,5 @@ Great Job Decoding this! GPSCTF{97165cb7c87edd729b169fe51eb59b49}...UUUUUUUJªª
 
 
  [^1]: _Photo credit: @r00__ at Medium.com_ 
- [^2]:(https://merricx.github.io/qrazybox/) and  
+ [^2]:(https://merricx.github.io/qrazybox/) 
  [^3]:(https://www.nayuki.io/page/creating-a-qr-code-step-by-step)
